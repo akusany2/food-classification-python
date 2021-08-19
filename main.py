@@ -1,7 +1,6 @@
-import prediction
 import os
+import prediction
 import requests
-from typing import Optional
 from pydantic import BaseModel
 from tensorflow.keras.models import load_model
 from fastapi import FastAPI
@@ -38,4 +37,5 @@ async def read_url(url: URL = None):
 
     model_load = load_model("./model_v1_inceptionV3.h5")
     result = prediction.predict_image(image_name, model_load)
+    os.remove(image_name)
     return {"prediction": result}
