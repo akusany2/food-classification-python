@@ -21,6 +21,9 @@ class URL(BaseModel):
     url: str = ""
 
 
+model_load = load_model("./model_v1_inceptionV3.h5")
+
+
 @app.get("/")
 def read_root():
     return {"CML": "NOICE"}
@@ -35,7 +38,6 @@ async def read_url(url: URL = None):
     with open(image_name, "wb") as handler:
         handler.write(img_data)
 
-    model_load = load_model("./model_v1_inceptionV3.h5")
     result = prediction.predict_image(image_name, model_load)
     os.remove(image_name)
     return {"prediction": result}
