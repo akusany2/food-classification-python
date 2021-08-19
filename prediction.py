@@ -1,7 +1,4 @@
-import os
-
 import numpy as np
-import matplotlib.pyplot as plt
 
 from tensorflow.keras.preprocessing import image
 
@@ -40,47 +37,4 @@ def predict_image(filename, model):
 
     index = np.argmax(prediction)
 
-    # plt.title("Prediction - {}".format(category[index][1]))
-    # plt.imshow(img_array)
     return format(category[index][1])
-
-
-def predict_dir(filedir, model):
-    cols = 5
-    pos = 0
-    images = []
-    total_images = len(os.listdir(filedir))
-    rows = total_images // cols + 1
-
-    true = filedir.split("/")[-1]
-
-    fig = plt.figure(1, figsize=(25, 25))
-
-    for i in sorted(os.listdir(filedir)):
-        images.append(os.path.join(filedir, i))
-
-    for subplot, imggg in enumerate(images):
-        img_ = image.load_img(imggg, target_size=(299, 299))
-        img_array = image.img_to_array(img_)
-
-        img_processed = np.expand_dims(img_array, axis=0)
-
-        img_processed /= 255.0
-        prediction = model.predict(img_processed)
-        index = np.argmax(prediction)
-
-        pred = category.get(index)[0]
-        if pred == true:
-            pos += 1
-
-        fig = plt.subplot(rows, cols, subplot + 1)
-        fig.set_title(category.get(index)[1], pad=10, size=18)
-        plt.imshow(img_array)
-
-    acc = pos / total_images
-    print(
-        "Accuracy of Test : {:.2f} ({pos}/{total})".format(
-            acc, pos=pos, total=total_images
-        )
-    )
-    plt.tight_layout()
